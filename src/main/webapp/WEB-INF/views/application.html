@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns = "http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Application</title>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script th:src="@{/resources/global.js}"></script>
+    </head>
+    
+    <body>
+        <div th:replace="../views/header :: header"></div>
+        
+        <div class="container">
+            <h1 class="text-center mb-4" th:text="'Application #' + ${apple.id}"></h1>
+            
+            <div class="col-md-4 offset-md-4">
+                <label>Student:</label>
+                
+                <div class="input-group mb-3">
+                    <input class="form-control" th:value="${'#' + apple.student.id + ' ' + apple.student.name}" disabled></input>
+                    <a th:href="@{/students/{id}(id=${apple.student.id})}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <label>Application type:</label>
+                <input class="form-control mb-3" th:value="${apple.type}" disabled></input>
+                
+                <label>Application date:</label>
+                <input class="form-control mb-3" th:value="${apple.date}" disabled></input>
+
+                <div class="col-md-10 offset-md-1">
+                    <div class="form-group row mb-3 justify-content-md-center">
+                        <div class="text-danger row justify-content-md-center mb-3" th:if="${isFree == false}">
+                            There's no free rooms.
+                        </div>
+                        
+                        <form th:action="@{/applications/{id}(id=${apple.id})}" method="POST">
+                            <div class="row justify-content-md-center">
+                                <div class="col-md-auto mb-3">
+                                    <input th:if="${apple.type == 'Assigning'}" type="submit" class="btn btn-primary" name="AcceptAssign" value="Accept"/>
+                                    <input th:if="${apple.type == 'Eviction'}" type="submit" class="btn btn-primary" name="AcceptEvict" value="Accept"/>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <form th:action="@{/applications/{id}(id=${apple.id})}" method="POST"> <!-- Отклонить заявление -->
+                            <div class="row justify-content-md-center">
+                                <div class="col-md-auto">
+                                    <input type="submit" class="btn btn-danger" name="Decline" value="Decline"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

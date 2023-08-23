@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns = "http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>All students</title>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script th:src="@{/resources/global.js}"></script>
+    </head>
+    
+    <body>
+        <div th:replace="../views/header :: header"></div>
+        
+        <div class="container">
+            <h1 class="text-center mb-4">Students</h1>
+            
+            <form th:action="@{/students/all/search}" method="GET">
+                <div class="col-md-4 mb-3">
+                    <label>Search by name</label>
+                    <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="Name"/>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Student group</label>
+                    <select class="form-control" name="studentGroupId">
+                        <option value="0">All groups</option>
+                        <option th:each="group: ${groups}" th:value="${group.id}" th:text="${group.name}"></option>
+                    </select>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Only assigned students</label>
+                    <input class="form-check-input" type="checkbox" name="assigne" th:value="${assigne}" role="switch" id="flexSwitchCheckDefault">
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Apply</button>
+            </form>
+            
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full name</th>
+                        <th scope="col">Student group</th>
+                        <th scope="col">Room</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                    <tr th:each="student: ${students}">
+                        <td>
+                            <a th:href="@{/students/{id}(id=${student.id})}" th:text="${student.id}"></a>
+                        </td>
+                        <td th:text="${student.name}"></td>
+                        <td th:text="${student.group.name}"></td>
+                        <td th:switch=="${student.room}">
+                            <div th:case="null"></div>
+                            <div th:case="*">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                    <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"></path>
+                                    <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"></path>
+                                </svg>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
